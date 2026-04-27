@@ -12,8 +12,8 @@ export class Film {
   @Column()
   director: string;
 
-  @Column()
-  tags: string;
+  @Column('text', { array: true })
+  tags: string[];
 
   @Column()
   title: string;

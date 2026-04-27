@@ -23,7 +23,9 @@ import { Schedule } from './films/entities/schedule.entity';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: configService.get<string>('DATABASE_DRIVER') as 'postgres',
-        url: configService.get<string>('DATABASE_URL'),
+        host: configService.get<string>('DATABASE_HOST'),
+        port: configService.get<number>('DATABASE_PORT'),
+        database: configService.get<string>('DATABASE_NAME'),
         username: configService.get<string>('DATABASE_USERNAME'),
         password: configService.get<string>('DATABASE_PASSWORD'),
         entities: [Film, Schedule],

@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Film } from '../films/entities/film.entity';
 import { Schedule } from '../films/entities/schedule.entity';
-
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 @Injectable()
 export class FilmsRepository {
   constructor(
@@ -18,7 +17,11 @@ export class FilmsRepository {
   }
 
   async findById(id: string) {
-    return this.filmRepository.findOne({ where: { id } });
+    try {
+      return await this.filmRepository.findOne({ where: { id } });
+    } catch {
+      throw new UnprocessableEntityException(`Невалидный идентификатор: ${id}`);
+    }
   }
 
   async updateTaken(filmId: string, sessionId: string, seat: string) {
@@ -28,11 +31,7 @@ export class FilmsRepository {
 
     if (!schedule) return null;
 
-    const taken = schedule.taken
-      ? schedule.taken.split(',').filter((s) => s)
-      : [];
-    taken.push(seat);
-    schedule.taken = taken.join(',');
+    schedule.taken = [...(schedule.taken || []), seat];
 
     return this.scheduleRepository.save(schedule);
   }

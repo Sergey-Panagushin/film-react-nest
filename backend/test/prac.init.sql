@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS public.films
             primary key,
     rating      double precision                not null,
     director    varchar                         not null,
-    tags        text                            not null,
+    tags        text[]                          not null,
     image       varchar                         not null,
     cover       varchar                         not null,
     title       varchar                         not null,
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS public.schedules
     rows     integer                         not null,
     seats    integer                         not null,
     price    double precision                not null,
-    taken    text                            not null,
+    taken    text[]                          not null default '{}',
     "filmId" uuid
         constraint "FK_1c2f5e637713a429f4854024a76"
             references public.films
