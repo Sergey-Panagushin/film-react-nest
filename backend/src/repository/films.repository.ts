@@ -20,7 +20,7 @@ export class FilmsRepository {
     try {
       return await this.filmRepository.findOne({ where: { id } });
     } catch {
-      throw new UnprocessableEntityException(`Невалидный идентификатор: ${id}`);
+      return null;
     }
   }
 
