@@ -25,8 +25,9 @@ export class OrderService {
       }
 
       const seat = `${ticket.row}:${ticket.seat}`;
+      const takenSeats = session.taken || [];
 
-      if (session.taken.includes(seat)) {
+      if (takenSeats.includes(seat)) {
         throw new BadRequestException(`Место ${seat} уже занято`);
       }
 

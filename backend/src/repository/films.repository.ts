@@ -1,24 +1,38 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Film, FilmDocument } from '../films/schemas/film.schema';
-
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Film } from '../films/entities/film.entity';
+import { Schedule } from '../films/entities/schedule.entity';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 @Injectable()
 export class FilmsRepository {
-  constructor(@InjectModel(Film.name) private filmModel: Model<FilmDocument>) {}
+  constructor(
+    @InjectRepository(Film)
+    private filmRepository: Repository<Film>,
+    @InjectRepository(Schedule)
+    private scheduleRepository: Repository<Schedule>,
+  ) {}
 
   async findAll() {
-    return this.filmModel.find().exec();
+    return this.filmRepository.find();
   }
 
   async findById(id: string) {
-    return this.filmModel.findOne({ id }).exec();
+    try {
+      return await this.filmRepository.findOne({ where: { id } });
+    } catch {
+      return null;
+    }
   }
 
   async updateTaken(filmId: string, sessionId: string, seat: string) {
-    return this.filmModel.updateOne(
-      { id: filmId, 'schedule.id': sessionId },
-      { $push: { 'schedule.$.taken': seat } },
-    ).exec();
+    const schedule = await this.scheduleRepository.findOne({
+      where: { id: sessionId },
+    });
+
+    if (!schedule) return null;
+
+    schedule.taken = [...(schedule.taken || []), seat];
+
+    return this.scheduleRepository.save(schedule);
   }
 }

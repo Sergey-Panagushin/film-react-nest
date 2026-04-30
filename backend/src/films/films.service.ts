@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
 import { FilmsRepository } from '../repository/films.repository';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 
 @Injectable()
 export class FilmsService {
@@ -12,7 +12,9 @@ export class FilmsService {
 
   async findSchedule(id: string) {
     const film = await this.filmsRepository.findById(id);
-    if (!film) return { total: 0, items: [] };
+    if (!film) {
+      throw new UnprocessableEntityException(`Невалидный идентификатор: ${id}`);
+    }
     return { total: film.schedule.length, items: film.schedule };
   }
 }
