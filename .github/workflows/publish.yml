@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - review-2
+      - review
 
 jobs:
   build-and-publish:
