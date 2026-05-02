@@ -5,10 +5,7 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM node:20-alpine AS production
+FROM alpine AS production
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci --omit=dev
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/public ./public
-CMD ["node", "dist/main"]
+CMD ["sh", "-c", "cp -r /app/dist/* /usr/share/nginx/html/"]
