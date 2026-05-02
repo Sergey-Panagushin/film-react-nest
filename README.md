@@ -1,5 +1,30 @@
 # FILM!
 
+Приложение для просмотра афиши и бронирования билетов в кино.
+
+## Ссылка на задеплоенный проект
+
+http://sergey-panagushins-front.nomorepartiessite.ru
+
+## Запуск проекта
+
+```bash
+docker compose up -d --build
+```
+
+## Переменные окружения
+
+DATABASE_DRIVER=postgres
+DATABASE_HOST=postgres
+DATABASE_PORT=5432
+DATABASE_NAME=films
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=films
+LOGGER_TYPE=json
+
 ## Установка
 
 ### MongoDB
