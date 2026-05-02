@@ -59,14 +59,18 @@ describe('TskvLogger', () => {
   });
 
   it('должен записывать в stdout при вызове метода log', () => {
-    const spy = jest.spyOn(process.stdout, 'write').mockImplementation(() => true);
+    const spy = jest
+      .spyOn(process.stdout, 'write')
+      .mockImplementation(() => true);
     logger.log('тестовое сообщение');
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
   });
 
   it('должен записывать в stderr при вызове метода error', () => {
-    const spy = jest.spyOn(process.stderr, 'write').mockImplementation(() => true);
+    const spy = jest
+      .spyOn(process.stderr, 'write')
+      .mockImplementation(() => true);
     logger.error('сообщение об ошибке');
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
